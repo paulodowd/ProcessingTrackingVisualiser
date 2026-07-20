@@ -86,7 +86,7 @@ The tracking system will report pose data of detected markers, and any messages 
 > P,34,0.2880, -0.5425, 1.6101, 324,90,02:37:46.055 <br>
 
 For pose (P), the comma separated values are MessageType, ID, x, y, theta, sequence_number, quality, time_of_day.
-For message (M), the output is MessageType, ID, [ your string ], time_of_day.
+For message (M), the output is MessageType, ID, [ your string ], time_of_day (hh:mm:s:ms).
 
 ### Accessing the Tracking System via Processing.org
 
