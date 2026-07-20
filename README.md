@@ -95,5 +95,11 @@ An example Processing sketch is provided in this repository that will visualise 
 <img src="https://github.com/paulodowd/ProcessingTrackingVisualiser/blob/main/images/TrackingScreen.png?raw=true">
 </p>
 
+## Further Information on Tracking Data
 
+- The Sequence field of the tracking data (port 5000) allows your robot to know if it has received more recent information. Per robot, for every new packet sent, sequence is incremented by 1.  If the sequence number does not change, it means that the tracking system has not successfully tracked the marker (old information).
+- The Quality field of the tracking data (port 5000) is determined by averaging the success of tracking the marker over the last 10 iterations.  Success is recorded as 100, and a fail recorded as 0.  The quality measure will therefore fall between 0:100.
+- The time provided by the tracking server to a connected user (port 8000 data stream) is the time of day with millisecond provision.  The tracking system is not connected to the internet and does not have a way to track time when powered off. Therefore, the time of day will probably appear incorrect.  You should calculate the time interval between datapoints to track the progression of time when processing your results.
+- The x and y coordinate information is absolute, but it will suffer from some noise and jitter.  You can measure the jitter and resolution of the coordinates by recording some position information over time whilst a marker is in a fixed position.
+- Theta is reported in radians.
 
