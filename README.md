@@ -67,19 +67,23 @@ To access the data from the tracking system, you can connect to the server on 19
 
 This will then print the tracking system data to your command line.  To save this data, you can extend the command with:
 
->> nc 192.168.8.2 8000 > results.csv
+> nc 192.168.8.2 8000 > results.csv
 
 If you are not using a linux distribution, you may find using <a href="https://putty.org/index.html">PuTTY</a> more convenient.  You should configure Putty with the address 192.168.8.2, port 8000, and type "raw".  
+
+<p align="center">
+<img src="https://github.com/paulodowd/ProcessingTrackingVisualiser/blob/main/images/PuttyRaw.png?raw=true">
+</p>
 
 
 The tracking system will report pose data of detected markers, and any messages sent to the tracking system by the robots.  When reporting, pose information is prefixed with a P, and messages with an M.  Some example output is below:
 
->> P,34,0.2880, -0.5425, 1.6101, 323,90,02:37:45.954 
->> P,207,0.5023, -0.6217, -2.4650, 0,111,02:37:45.985 
->> P,207,0.5023, -0.6217, -2.4650, 0,111,02:37:46.018 
->> P,207,0.5023, -0.6217, -2.4650, 0,111,02:37:46.048 
->> M,34,hello, time is 180371,02:37:46.055 
->> P,34,0.2880, -0.5425, 1.6101, 324,90,02:37:46.055 
+> P,34,0.2880, -0.5425, 1.6101, 323,90,02:37:45.954 <br>
+> P,207,0.5023, -0.6217, -2.4650, 0,111,02:37:45.985 <br>
+> P,207,0.5023, -0.6217, -2.4650, 0,111,02:37:46.018 <br>
+> P,207,0.5023, -0.6217, -2.4650, 0,111,02:37:46.048 <br>
+> M,34,hello, time is 180371,02:37:46.055 <br>
+> P,34,0.2880, -0.5425, 1.6101, 324,90,02:37:46.055 <br>
 
 For pose (P), the comma separated values are MessageType, ID, x, y, theta, sequence_number, quality, time_of_day.
 For message (M), the output is MessageType, ID, [ your string ], time_of_day.
@@ -87,6 +91,9 @@ For message (M), the output is MessageType, ID, [ your string ], time_of_day.
 ### Accessing the Tracking System via Processing.org
 
 An example Processing sketch is provided in this repository that will visualise the markers being tracked, and save all data to a .csv file.  This visualiser is intended to help you set up the system - it may help you to understand the coordinate system and it's relationship to the space available.
+<p align="center">
+<img src="https://github.com/paulodowd/ProcessingTrackingVisualiser/blob/main/images/TrackingScreen.png?raw=true">
+</p>
 
 
 
