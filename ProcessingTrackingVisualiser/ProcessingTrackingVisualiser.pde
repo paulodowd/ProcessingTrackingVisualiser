@@ -220,6 +220,12 @@ void parseTextMessage(String line) {
   String sourceTime = line.substring(finalComma + 1).trim();
 
   addLog(sourceTime + "  Robot " + id + ": " + message);
+
+
+  RobotPose robot = robots.get(id);
+  if ( robot != null ) {
+    robot.last_msg = message;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -331,9 +337,12 @@ void drawRobot(RobotPose robot, float mapX, float mapY, float mapW, float mapH) 
 
   stroke(30, alphaValue);
   strokeWeight(2);
-  robot.qualityToDisplayColor();
-  fill(robot.displayColour);//, alphaValue);
+  robot.qualityToDisplayColor(alphaValue);
+  fill(robot.displayColour);
   ellipse(0, 0, 25, 25);
+  //fill(255,255,255,alphaValue);
+  //ellipse(0,0,25,25);
+  println( alphaValue );
 
   if ( robot.id < 200 ) {
     strokeWeight(3);
@@ -341,7 +350,7 @@ void drawRobot(RobotPose robot, float mapX, float mapY, float mapW, float mapH) 
     line(22, 0, 14, -6);
     line(22, 0, 14, 6);
   }
-  
+
   popMatrix();
   fill(25, alphaValue);
   textAlign(LEFT, BOTTOM);
@@ -350,7 +359,7 @@ void drawRobot(RobotPose robot, float mapX, float mapY, float mapW, float mapH) 
 
   textSize(10);
   textAlign(LEFT, TOP);
-  text("Q=" + robot.quality + " \nS=" + robot.sequenceNumber, screenX + 16, screenY + 2);
+  text("Q=" + robot.quality + " \nS=" + robot.sequenceNumber + "\n" + robot.last_msg, screenX + 16, screenY + 2);
 }
 
 void drawInformationPanel(float x, float y, float w, float h) {
@@ -406,7 +415,7 @@ void drawInformationPanel(float x, float y, float w, float h) {
   fill(55);
   for (int i = 0; i < messageLog.size(); i++) {
     text(messageLog.get(i), x + 18, cursorY, w - 36, 38);
-    cursorY += 42;
+    cursorY += 22;
   }
 
   fill(95);
@@ -455,7 +464,7 @@ void drawPoseTable(float x, float y, float w) {
     text(nf(robot.x, 1, 3), x + 28, rowY + 11);
     text(nf(robot.y, 1, 3), x + 75, rowY + 11);
     text(nf(robot.theta, 1, 3), x + 122, rowY + 11);
-    text(nf(robot.quality,0,0)+"%", x + 174, rowY + 11);
+    text(nf(robot.quality, 0, 0)+"%", x + 174, rowY + 11);
     text(robot.sourceTime, x + 210, rowY + 11);
   }
 }
@@ -535,30 +544,45 @@ class RobotPose {
   float x;
   float y;
   float theta;
-  int sequenceNumber;
+  int sequenceNumber = 0;
   float quality;
   String sourceTime = "";
   int localUpdateTimeMs = 0;
   int displayColour;
+  String last_msg;
 
   RobotPose(int id, int displayColour) {
     this.id = id;
     this.displayColour = displayColour;
+    this.last_msg = "";
   }
 
-  void qualityToDisplayColor() {
-     color c0 = color( 220,  0, 0);
-     color c1 = color(   0,220, 0);
-     this.displayColour = lerpColor( c0, c1, this.quality/100.0);
+  void qualityToDisplayColor( int alphaValue ) {
+    color c0 = color( 220, 0, 0, alphaValue  );
+    color c1 = color(   0, 220, 0, alphaValue );
+    this.displayColour = lerpColor( c0, c1, this.quality/100.0);
   }
 
   void update(float x, float y, float theta, int sequenceNumber, int quality, String sourceTime) {
-    this.x = x;
-    this.y = y;
-    this.theta = theta;
-    this.sequenceNumber = sequenceNumber;
-    this.quality = quality;
-    this.sourceTime = sourceTime;
-    this.localUpdateTimeMs = millis();
+    if ( this.id < 200 ) {
+      if ( sequenceNumber > this.sequenceNumber ) {
+        this.x = x;
+        this.y = y;
+        this.theta = theta;
+        this.sequenceNumber = sequenceNumber;
+        this.quality = quality;
+        this.sourceTime = sourceTime;
+        this.localUpdateTimeMs = millis();
+      }
+    } else {
+
+        this.x = x;
+        this.y = y;
+        this.theta = theta;
+        this.sequenceNumber = sequenceNumber;
+        this.quality = quality;
+        this.sourceTime = sourceTime;
+        this.localUpdateTimeMs = millis();
+    }
   }
 }
